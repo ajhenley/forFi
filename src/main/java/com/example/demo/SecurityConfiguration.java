@@ -29,9 +29,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    .antMatchers("/h2-console/**").permitAll()
-                    .antMatchers("/").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-                    .antMatchers("/secure").access("hasRole('ROLE_ADMIN')")
+                    .antMatchers("/","/h2-console/**", "/register").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login").permitAll()
@@ -50,9 +48,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().
-                withUser("user").password("password").roles("USER").and()
-                   .withUser("dave").password("begreat").roles("ADMIN");
         auth.userDetailsService(userDetailsServiceBean());
     }
 }
